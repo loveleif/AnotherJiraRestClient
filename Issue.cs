@@ -6,7 +6,8 @@ using System.Text;
 namespace AnotherJiraRestClient
 {
     /// <summary>
-    /// Wrapper around the JSON object returned for a JIRA issue.
+    /// Wrapper around the JSON object returned for a JIRA issue. See 
+    /// http://docs.atlassian.com/jira/REST/latest/ for documentation.
     /// </summary>
     public class Issue
     {
