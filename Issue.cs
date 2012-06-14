@@ -28,7 +28,7 @@ namespace AnotherJiraRestClient
         public List<object> fixVersions { get; set; }
         public string resolutiondate { get; set; }
         public int timespent { get; set; }
-        public Reporter reporter { get; set; }
+        public Author reporter { get; set; }
         public int aggregatetimeoriginalestimate { get; set; }
         public string created { get; set; }
         public string updated { get; set; }
@@ -37,12 +37,12 @@ namespace AnotherJiraRestClient
         public string duedate { get; set; }
         public List<object> issuelinks { get; set; }
         public Watches watches { get; set; }
-        public Worklog worklog { get; set; }
+        public Worklogs worklog { get; set; }
         public List<object> subtasks { get; set; }
         public Status status { get; set; }
         public List<string> labels { get; set; }
         public int workratio { get; set; }
-        public Assignee assignee { get; set; }
+        public Author assignee { get; set; }
         public List<object> attachment { get; set; }
         public int aggregatetimeestimate { get; set; }
         public Project project { get; set; }
@@ -51,7 +51,7 @@ namespace AnotherJiraRestClient
         public int timeestimate { get; set; }
         public Aggregateprogress aggregateprogress { get; set; }
         public List<object> components { get; set; }
-        public Comment comment { get; set; }
+        public Comments comment { get; set; }
         public int timeoriginalestimate { get; set; }
         public int aggregatetimespent { get; set; }
     }
@@ -98,15 +98,6 @@ namespace AnotherJiraRestClient
         public string name { get; set; }
     }
 
-    public class Reporter
-    {
-        public string self { get; set; }
-        public string name { get; set; }
-        public string emailAddress { get; set; }
-        public string displayName { get; set; }
-        public bool active { get; set; }
-    }
-
     public class Priority
     {
         public string self { get; set; }
@@ -122,29 +113,11 @@ namespace AnotherJiraRestClient
         public bool isWatching { get; set; }
     }
 
-    public class Author
-    {
-        public string self { get; set; }
-        public string name { get; set; }
-        public string emailAddress { get; set; }
-        public string displayName { get; set; }
-        public bool active { get; set; }
-    }
-
-    public class UpdateAuthor
-    {
-        public string self { get; set; }
-        public string name { get; set; }
-        public string emailAddress { get; set; }
-        public string displayName { get; set; }
-        public bool active { get; set; }
-    }
-
-    public class Worklog2
+    public class Worklog
     {
         public string self { get; set; }
         public Author author { get; set; }
-        public UpdateAuthor updateAuthor { get; set; }
+        public Author updateAuthor { get; set; }
         public string comment { get; set; }
         public string created { get; set; }
         public string updated { get; set; }
@@ -154,12 +127,12 @@ namespace AnotherJiraRestClient
         public string id { get; set; }
     }
 
-    public class Worklog
+    public class Worklogs
     {
         public int startAt { get; set; }
         public int maxResults { get; set; }
         public int total { get; set; }
-        public List<Worklog2> worklogs { get; set; }
+        public List<Worklog> worklogs { get; set; }
     }
 
     public class Status
@@ -169,15 +142,6 @@ namespace AnotherJiraRestClient
         public string iconUrl { get; set; }
         public string name { get; set; }
         public string id { get; set; }
-    }
-
-    public class Assignee
-    {
-        public string self { get; set; }
-        public string name { get; set; }
-        public string emailAddress { get; set; }
-        public string displayName { get; set; }
-        public bool active { get; set; }
     }
 
     public class Project
@@ -195,40 +159,31 @@ namespace AnotherJiraRestClient
         public int percent { get; set; }
     }
 
-    public class Author2
+    public class Author
     {
         public string self { get; set; }
         public string name { get; set; }
         public string emailAddress { get; set; }
         public string displayName { get; set; }
         public bool active { get; set; }
-    }
-
-    public class UpdateAuthor2
-    {
-        public string self { get; set; }
-        public string name { get; set; }
-        public string emailAddress { get; set; }
-        public string displayName { get; set; }
-        public bool active { get; set; }
-    }
-
-    public class Comment2
-    {
-        public string self { get; set; }
-        public string id { get; set; }
-        public Author2 author { get; set; }
-        public string body { get; set; }
-        public UpdateAuthor2 updateAuthor { get; set; }
-        public string created { get; set; }
-        public string updated { get; set; }
     }
 
     public class Comment
     {
+        public string self { get; set; }
+        public string id { get; set; }
+        public Author author { get; set; }
+        public string body { get; set; }
+        public Author updateAuthor { get; set; }
+        public string created { get; set; }
+        public string updated { get; set; }
+    }
+
+    public class Comments
+    {
         public int startAt { get; set; }
         public int maxResults { get; set; }
         public int total { get; set; }
-        public List<Comment2> comments { get; set; }
+        public List<Comment> comments { get; set; }
     }
 }
