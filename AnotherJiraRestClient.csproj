@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Issue.cs" />
+    <Compile Include="Issues.cs" />
     <Compile Include="JiraClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

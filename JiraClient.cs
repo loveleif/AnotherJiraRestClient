@@ -27,6 +27,7 @@ namespace AnotherJiraRestClient
         /// <returns></returns>
         public T Execute<T>(RestRequest request) where T : new()
         {
+            // TODO: Make client a class member?
             var client = new RestClient(baseUrl);
             client.Authenticator = new HttpBasicAuthenticator(userName, password);
             var response = client.Execute<T>(request);
@@ -36,9 +37,23 @@ namespace AnotherJiraRestClient
         public Issue GetIssue(string issueKey)
         {
             var request = new RestRequest();
+            // TODO: Move /rest/api/2 elsewhere
             request.Resource = "/rest/api/2/issue/" + issueKey;
             request.Method = Method.GET;
             return Execute<Issue>(request);
+        }
+
+        public Issues GetIssuesByJql(string jql)
+        {
+            var request = new RestRequest();
+            request.Resource = "/rest/api/2/search?jql=" + jql;
+            request.Method = Method.GET;
+            return Execute<Issues>(request);
+        }
+
+        public Issues GetIssuesByProject(string projectKey)
+        {
+            return GetIssuesByJql("project=" + projectKey);
         }
     }
 }
