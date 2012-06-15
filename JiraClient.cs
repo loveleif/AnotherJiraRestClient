@@ -8,8 +8,8 @@ namespace AnotherJiraRestClient
 {
     // TODO: Exception handling. When Jira service is unavailible, when response code is
     // unexpected, etc.
-    
-    // TODO: 
+
+    // TODO: Check if response.ResponseStatus == ResponseStatus.Error
 
     /// <summary>
     /// Class used for all interaction with the Jira API. See 
