@@ -6,6 +6,8 @@ using RestSharp;
 
 namespace AnotherJiraRestClient
 {
+    // TODO: Exception handling. When Jira service is unavailible, when response code is
+    // unexpected, etc.
     public class JiraClient
     {
         private readonly string baseUrl;
