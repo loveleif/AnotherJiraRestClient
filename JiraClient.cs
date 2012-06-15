@@ -44,8 +44,8 @@ namespace AnotherJiraRestClient
         public T Execute<T>(RestRequest request) where T : new()
         {
             // TODO: Make client a class member?
-            var client = new RestClient(account.JiraServerUrl);
-            client.Authenticator = new HttpBasicAuthenticator(account.JiraUser, account.JiraPassword);
+            var client = new RestClient(account.ServerUrl);
+            client.Authenticator = new HttpBasicAuthenticator(account.User, account.Password);
             var response = client.Execute<T>(request);
             return response.Data;
         }

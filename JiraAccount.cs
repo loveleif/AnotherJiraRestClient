@@ -8,8 +8,8 @@ namespace AnotherJiraRestClient
     [Serializable()]
     public class JiraAccount
     {
-        public string JiraServerUrl { get; set; }
-        public string JiraUser { get; set; }
-        public string JiraPassword { get; set; }
+        public string ServerUrl { get; set; }
+        public string User { get; set; }
+        public string Password { get; set; }
     }
 }
