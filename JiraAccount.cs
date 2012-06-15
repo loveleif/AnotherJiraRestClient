@@ -5,6 +5,7 @@ using System.Text;
 
 namespace AnotherJiraRestClient
 {
+    [Serializable()]
     public class JiraAccount
     {
         public string JiraServerUrl { get; set; }
