@@ -18,9 +18,7 @@ namespace AnotherJiraRestClient
     /// </summary>
     public class JiraClient
     {
-        private readonly string baseUrl;
-        private readonly string userName;
-        private readonly string password;
+        private readonly JiraAccount account;
 
         /// <summary>
         /// Constructs a JiraClient. Please note, the baseUrl needs to be https
@@ -32,11 +30,9 @@ namespace AnotherJiraRestClient
         /// </param>
         /// <param name="userName">User name</param>
         /// <param name="password">Password</param>
-        public JiraClient(string baseUrl, string userName, string password)
+        public JiraClient(JiraAccount account)
         {
-            this.baseUrl = baseUrl;
-            this.userName = userName;
-            this.password = password;
+            this.account = account;
         }
 
         /// <summary>
@@ -48,8 +44,8 @@ namespace AnotherJiraRestClient
         public T Execute<T>(RestRequest request) where T : new()
         {
             // TODO: Make client a class member?
-            var client = new RestClient(baseUrl);
-            client.Authenticator = new HttpBasicAuthenticator(userName, password);
+            var client = new RestClient(account.JiraServerUrl);
+            client.Authenticator = new HttpBasicAuthenticator(account.JiraUser, account.JiraPassword);
             var response = client.Execute<T>(request);
             return response.Data;
         }
