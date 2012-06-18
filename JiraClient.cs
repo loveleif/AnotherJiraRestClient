@@ -54,12 +54,19 @@ namespace AnotherJiraRestClient
         /// Returns the Issue with the specified key.
         /// </summary>
         /// <param name="issueKey">Issue key</param>
+        /// <param name="fields">Fields to load</param>
         /// <returns>The issue with the specified key</returns>
-        public Issue GetIssue(string issueKey)
+        public Issue GetIssue(string issueKey, IEnumerable<string> fields = null)
         {
+            string fieldsString;
+            if (fields != null)
+                fieldsString = string.Join(",", fields);
+            else
+                fieldsString = "";
+
             var request = new RestRequest();
             // TODO: Move /rest/api/2 elsewhere
-            request.Resource = "/rest/api/2/issue/" + issueKey;
+            request.Resource = "/rest/api/2/issue/" + issueKey + "?fields=" + fieldsString;
             request.Method = Method.GET;
             return Execute<Issue>(request);
         }
