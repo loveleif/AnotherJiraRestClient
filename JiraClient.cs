@@ -11,6 +11,8 @@ namespace AnotherJiraRestClient
 
     // TODO: Check if response.ResponseStatus == ResponseStatus.Error
 
+    // TODO: What if URL is too long?
+
     /// <summary>
     /// Class used for all interaction with the Jira API. See 
     /// http://docs.atlassian.com/jira/REST/latest/ for documentation of the
@@ -50,6 +52,16 @@ namespace AnotherJiraRestClient
             return response.Data;
         }
 
+        private static string GetFieldsString(IEnumerable<string> fields)
+        {
+            string fieldsString;
+            if (fields != null)
+                fieldsString = string.Join(",", fields);
+            else
+                fieldsString = "";
+            return fieldsString;
+        }
+
         /// <summary>
         /// Returns the Issue with the specified key. If the fields parameter
         /// is specified only the given field names will be loaded. Issue
@@ -60,11 +72,7 @@ namespace AnotherJiraRestClient
         /// <returns>The issue with the specified key</returns>
         public Issue GetIssue(string issueKey, IEnumerable<string> fields = null)
         {
-            string fieldsString;
-            if (fields != null)
-                fieldsString = string.Join(",", fields);
-            else
-                fieldsString = "";
+            var fieldsString = GetFieldsString(fields);
             
             var request = new RestRequest();
             // TODO: Move /rest/api/2 elsewhere
@@ -78,10 +86,12 @@ namespace AnotherJiraRestClient
         /// </summary>
         /// <param name="jql">a JQL search string</param>
         /// <returns>searchresults</returns>
-        public Issues GetIssuesByJql(string jql)
+        public Issues GetIssuesByJql(string jql, IEnumerable<string> fields = null)
         {
+            var fieldsString = GetFieldsString(fields);
+
             var request = new RestRequest();
-            request.Resource = "/rest/api/2/search?jql=" + jql;
+            request.Resource = "/rest/api/2/search?jql=" + jql + "&fields=" + fieldsString;
             request.Method = Method.GET;
             return Execute<Issues>(request);
         }
@@ -91,9 +101,9 @@ namespace AnotherJiraRestClient
         /// </summary>
         /// <param name="projectKey">project key</param>
         /// <returns>the Issues of the specified project</returns>
-        public Issues GetIssuesByProject(string projectKey)
+        public Issues GetIssuesByProject(string projectKey, IEnumerable<string> fields = null)
         {
-            return GetIssuesByJql("project=" + projectKey);
+            return GetIssuesByJql("project=" + projectKey, fields);
         }
     }
 }
