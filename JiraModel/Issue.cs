@@ -13,52 +13,49 @@ namespace AnotherJiraRestClient
     /// </summary>
     public class Issue
     {
+        // Field names
+        public static const string FIELD_PROGRESS = "progress";
+        public static const string FIELD_SUMMARY = "summary";
+        public static const string FIELD_TIMETRACKING = "timetracking";
+        public static const string FIELD_ISSUETYPE = "issuetype";
+        public static const string FIELD_VOTES = "votes";
+        public static const string FIELD_RESOLUTION = "resolution";
+        public static const string FIELD_FIXVERSIONS = "fixVersions";
+        public static const string FIELD_RESOLUTIONDATE = "resolutiondate";
+        public static const string FIELD_TIMESPENT = "timespent";
+        public static const string FIELD_REPORTER = "reporter";
+        public static const string FIELD_AGGREGATEIMEORIHINALESTIMATE = "aggregatetimeoriginalestimate";
+        public static const string FIELD_CREATED = "created";
+        public static const string FIELD_UPDATED = "updated";
+        public static const string FIELD_DESCRIPTION = "description";
+        public static const string FIELD_PRIORITY = "priority";
+        public static const string FIELD_DUEDATE = "duedate";
+        public static const string FIELD_ISSUELINKS = "issuelinks";
+        public static const string FIELD_WATCHES = "watches";
+        public static const string FIELD_WORKLOG = "worklog";
+        public static const string FIELD_SUBTASKS = "subtasks";
+        public static const string FIELD_STATUS = "status";
+        public static const string FIELD_LABELS = "labels";
+        public static const string FIELD_WORKRATIO = "workratio";
+        public static const string FIELD_ASSIGNEE = "assignee";
+        public static const string FIELD_ATTACHMENT = "attachment";
+        public static const string FIELD_AGGREGATETIMEESTIMATE = "aggregatetimeestimate";
+        public static const string FIELD_PROJECT = "project";
+        public static const string FIELD_VERSIONS = "versions";
+        public static const string FIELD_ENVIRONMENT = "environment";
+        public static const string FIELD_TIMEESTIMATE = "timeestimate";
+        public static const string FIELD_AGGREGATEPROGESS = "aggregateprogress";
+        public static const string FIELD_COMPONENTS = "components";
+        public static const string FIELD_COMMENT = "comment";
+        public static const string FIELD_TIMEORIGINALESTIMATE = "timeoriginalestimate";
+        public static const string FIELD_AGGREGATETIMESPENT = "aggregatetimespent";
+
         public string expand { get; set; }
         public string id { get; set; }
         public string self { get; set; }
         public string key { get; set; }
         public Fields fields { get; set; }
     }
-
-    public class IssueFieldNames
-    {
-        public static const string PROGRESS = "progress";
-        public static const string SUMMARY = "summary";
-        public static const string TIMETRACKING = "timetracking";
-        public static const string ISSUETYPE = "issuetype";
-        public static const string VOTES = "votes";
-        public static const string RESOLUTION = "resolution";
-        public static const string FIXVERSIONS = "fixVersions";
-        public static const string RESOLUTIONDATE = "resolutiondate";
-        public static const string TIMESPENT = "timespent";
-        public static const string REPORTER = "reporter";
-        public static const string AGGREGATEIMEORIHINALESTIMATE = "aggregatetimeoriginalestimate";
-        public static const string CREATED = "created";
-        public static const string UPDATED = "updated";
-        public static const string DESCRIPTION = "description";
-        public static const string PRIORITY = "priority";
-        public static const string DUEDATE = "duedate";
-        public static const string ISSUELINKS = "issuelinks";
-        public static const string WATCHES = "watches";
-        public static const string WORKLOG = "worklog";
-        public static const string SUBTASKS = "subtasks";
-        public static const string STATUS = "status";
-        public static const string LABELS = "labels";
-        public static const string WORKRATIO = "workratio";
-        public static const string ASSIGNEE = "assignee";
-        public static const string ATTACHMENT = "attachment";
-        public static const string AGGREGATETIMEESTIMATE = "aggregatetimeestimate";
-        public static const string PROJECT = "project";
-        public static const string VERSIONS = "versions";
-        public static const string ENVIRONMENT = "environment";
-        public static const string TIMEESTIMATE = "timeestimate";
-        public static const string AGGREGATEPROGESS = "aggregateprogress";
-        public static const string COMPONENTS = "components";
-        public static const string COMMENT = "comment";
-        public static const string TIMEORIGINALESTIMATE = "timeoriginalestimate";
-        public static const string AGGREGATETIMESPENT = "aggregatetimespent";
-    }
-
 
     public class Fields
     {

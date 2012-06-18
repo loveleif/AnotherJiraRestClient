@@ -51,7 +51,9 @@ namespace AnotherJiraRestClient
         }
 
         /// <summary>
-        /// Returns the Issue with the specified key.
+        /// Returns the Issue with the specified key. If the fields parameter
+        /// is specified only the given field names will be loaded. Issue
+        /// contains the availible field names, for example Issue.SUMMARY.
         /// </summary>
         /// <param name="issueKey">Issue key</param>
         /// <param name="fields">Fields to load</param>
@@ -63,7 +65,7 @@ namespace AnotherJiraRestClient
                 fieldsString = string.Join(",", fields);
             else
                 fieldsString = "";
-
+            
             var request = new RestRequest();
             // TODO: Move /rest/api/2 elsewhere
             request.Resource = "/rest/api/2/issue/" + issueKey + "?fields=" + fieldsString;
