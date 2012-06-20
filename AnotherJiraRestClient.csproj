@@ -47,6 +47,7 @@
     <Compile Include="JiraModel\Issue.cs" />
     <Compile Include="JiraModel\Issues.cs" />
     <Compile Include="JiraClient.cs" />
+    <Compile Include="JiraModel\Priority.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

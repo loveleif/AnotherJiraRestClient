@@ -105,5 +105,18 @@ namespace AnotherJiraRestClient
         {
             return GetIssuesByJql("project=" + projectKey, fields);
         }
+
+        /// <summary>
+        /// Returns a list of all possible priorities.
+        /// </summary>
+        /// <returns></returns>
+        public List<Priority> GetPriorities()
+        {
+            var request = new RestRequest();
+            // TODO: Move /rest/api/2 elsewhere
+            request.Resource = "/rest/api/2/priority";
+            request.Method = Method.GET;
+            return Execute<List<Priority>>(request);
+        }
     }
 }
