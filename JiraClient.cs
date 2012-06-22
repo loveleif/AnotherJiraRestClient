@@ -118,5 +118,18 @@ namespace AnotherJiraRestClient
             request.Method = Method.GET;
             return Execute<List<Priority>>(request);
         }
+
+        /// <summary>
+        /// Returns a list of all possible statuses.
+        /// </summary>
+        /// <returns></returns>
+        public List<Status> GetStatuses()
+        {
+            var request = new RestRequest();
+            // TODO: Move /rest/api/2 elsewhere
+            request.Resource = "/rest/api/2/status";
+            request.Method = Method.GET;
+            return Execute<List<Status>>(request);
+        }
     }
 }
