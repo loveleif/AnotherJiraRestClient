@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using RestSharp;
 
@@ -130,6 +131,28 @@ namespace AnotherJiraRestClient
             request.Resource = "/rest/api/2/status";
             request.Method = Method.GET;
             return Execute<List<Status>>(request);
+        }
+
+        public string CreateIssue(string projectId, string summary, string issueTypeId, string priorityId, IEnumerable<string> labels)
+        {
+            var client = new RestClient(account.ServerUrl);
+            client.Authenticator = new HttpBasicAuthenticator(account.User, account.Password);
+            var request = new RestRequest(Method.POST);
+            request.Resource = "rest/api/2/issue";
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(new
+            {
+                fields = new
+                {
+                    project = new { id = projectId },
+                    summary = summary,
+                    issuetype = new { id = issueTypeId },
+                    priority = new { id = priorityId },
+                    labels = labels
+                }
+            });
+            var response = client.Execute(request);
+            return response.Content;
         }
     }
 }
