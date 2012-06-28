@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AnotherJiraRestClient.JiraModel;
 
 namespace AnotherJiraRestClient
 {
@@ -62,7 +63,7 @@ namespace AnotherJiraRestClient
         public Progress progress { get; set; }
         public string summary { get; set; }
         public Timetracking timetracking { get; set; }
-        public Issuetype issuetype { get; set; }
+        public IssueType issuetype { get; set; }
         public Votes votes { get; set; }
         public Resolution resolution { get; set; }
         public List<object> fixVersions { get; set; }
@@ -90,7 +91,7 @@ namespace AnotherJiraRestClient
         public string environment { get; set; }
         public int timeestimate { get; set; }
         public Aggregateprogress aggregateprogress { get; set; }
-        public List<object> components { get; set; }
+        public List<Component> components { get; set; }
         public Comments comment { get; set; }
         public int timeoriginalestimate { get; set; }
         public int aggregatetimespent { get; set; }
@@ -113,7 +114,7 @@ namespace AnotherJiraRestClient
         public int timeSpentSeconds { get; set; }
     }
 
-    public class Issuetype
+    public class IssueType
     {
         public string self { get; set; }
         public string id { get; set; }
@@ -167,15 +168,6 @@ namespace AnotherJiraRestClient
         public List<Worklog> worklogs { get; set; }
     }
 
-    public class Status
-    {
-        public string self { get; set; }
-        public string description { get; set; }
-        public string iconUrl { get; set; }
-        public string name { get; set; }
-        public string id { get; set; }
-    }
-
     public class Project
     {
         public string self { get; set; }
@@ -217,5 +209,13 @@ namespace AnotherJiraRestClient
         public int maxResults { get; set; }
         public int total { get; set; }
         public List<Comment> comments { get; set; }
+    }
+
+    public class Component
+    {
+        public string self { get; set; }
+        public string id { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
     }
 }

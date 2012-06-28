@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using AnotherJiraRestClient.JiraModel;
 using RestSharp;
 
 namespace AnotherJiraRestClient
@@ -21,7 +22,7 @@ namespace AnotherJiraRestClient
     /// </summary>
     public class JiraClient
     {
-        private readonly JiraAccount account;
+        private readonly RestClient client;
 
         /// <summary>
         /// Constructs a JiraClient. Please note, the baseUrl needs to be https
@@ -35,7 +36,10 @@ namespace AnotherJiraRestClient
         /// <param name="password">Password</param>
         public JiraClient(JiraAccount account)
         {
-            this.account = account;
+            client = new RestClient(account.ServerUrl)
+            {
+                Authenticator = new HttpBasicAuthenticator(account.User, account.Password)
+            };
         }
 
         /// <summary>
@@ -46,9 +50,6 @@ namespace AnotherJiraRestClient
         /// <returns></returns>
         public T Execute<T>(RestRequest request) where T : new()
         {
-            // TODO: Make client a class member?
-            var client = new RestClient(account.ServerUrl);
-            client.Authenticator = new HttpBasicAuthenticator(account.User, account.Password);
             var response = client.Execute<T>(request);
             return response.Data;
         }
@@ -87,12 +88,34 @@ namespace AnotherJiraRestClient
         /// </summary>
         /// <param name="jql">a JQL search string</param>
         /// <returns>searchresults</returns>
-        public Issues GetIssuesByJql(string jql, IEnumerable<string> fields = null)
+        public Issues GetIssuesByJql(string jql, int startAt, int maxResults, IEnumerable<string> fields = null)
         {
-            var fieldsString = GetFieldsString(fields);
-
             var request = new RestRequest();
-            request.Resource = "/rest/api/2/search?jql=" + jql + "&fields=" + fieldsString;
+            request.Resource = "/rest/api/2/search";
+            request.AddParameter(new Parameter()
+                {
+                    Name = "jql",
+                    Value = jql,
+                    Type = ParameterType.GetOrPost
+                });
+            request.AddParameter(new Parameter()
+            {
+                Name = "fields",
+                Value = GetFieldsString(fields),
+                Type = ParameterType.GetOrPost
+            });
+            request.AddParameter(new Parameter()
+            {
+                Name = "startAt",
+                Value = startAt,
+                Type = ParameterType.GetOrPost
+            });
+            request.AddParameter(new Parameter()
+            {
+                Name = "maxResults",
+                Value = maxResults,
+                Type = ParameterType.GetOrPost
+            });
             request.Method = Method.GET;
             return Execute<Issues>(request);
         }
@@ -102,9 +125,9 @@ namespace AnotherJiraRestClient
         /// </summary>
         /// <param name="projectKey">project key</param>
         /// <returns>the Issues of the specified project</returns>
-        public Issues GetIssuesByProject(string projectKey, IEnumerable<string> fields = null)
+        public Issues GetIssuesByProject(string projectKey, int startAt, int maxResults, IEnumerable<string> fields = null)
         {
-            return GetIssuesByJql("project=" + projectKey, fields);
+            return GetIssuesByJql("project=" + projectKey, startAt, maxResults, fields);
         }
 
         /// <summary>
@@ -120,6 +143,21 @@ namespace AnotherJiraRestClient
             return Execute<List<Priority>>(request);
         }
 
+        public ProjectMeta GetProjectMeta(string projectKey)
+        {
+            var request = new RestRequest();
+            request.Resource = "/rest/api/2/issue/createmeta";
+            request.Parameters.Add(new Parameter() 
+              { Name = "projectKeys", 
+                Value = projectKey, 
+                Type = ParameterType.GetOrPost });
+            request.Method = Method.GET;
+            var createMeta = Execute<IssueCreateMeta>(request);
+            if (createMeta.projects[0].key != projectKey)
+                return null;
+            return createMeta.projects[0];
+        }
+
         /// <summary>
         /// Returns a list of all possible statuses.
         /// </summary>
@@ -133,10 +171,9 @@ namespace AnotherJiraRestClient
             return Execute<List<Status>>(request);
         }
 
-        public string CreateIssue(string projectId, string summary, string issueTypeId, string priorityId, IEnumerable<string> labels)
+        public string CreateIssue(string projectKey, string summary, string description, string issueTypeId, string priorityId, IEnumerable<string> labels)
         {
-            var client = new RestClient(account.ServerUrl);
-            client.Authenticator = new HttpBasicAuthenticator(account.User, account.Password);
+            // TODO: Can you add custom fields by using an ExpandoObject??
             var request = new RestRequest(Method.POST);
             request.Resource = "rest/api/2/issue";
             request.RequestFormat = DataFormat.Json;
@@ -144,8 +181,9 @@ namespace AnotherJiraRestClient
             {
                 fields = new
                 {
-                    project = new { id = projectId },
+                    project = new { key = projectKey },
                     summary = summary,
+                    description = description,
                     issuetype = new { id = issueTypeId },
                     priority = new { id = priorityId },
                     labels = labels
