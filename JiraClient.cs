@@ -43,25 +43,28 @@ namespace AnotherJiraRestClient
         }
 
         /// <summary>
-        /// Execute a RestRequest using this JiraClient.
+        /// Executes a RestRequest and returns the deserialized response.
         /// </summary>
         /// <typeparam name="T">Request return type</typeparam>
-        /// <param name="request">RestRequest to execute</param>
-        /// <returns></returns>
+        /// <param name="request">request to execute</param>
+        /// <returns>deserialized response of request</returns>
         public T Execute<T>(RestRequest request) where T : new()
         {
-            var response = client.Execute<T>(request);
-            return response.Data;
+            return client.Execute<T>(request).Data;
         }
 
-        private static string GetFieldsString(IEnumerable<string> fields)
+        /// <summary>
+        /// Returns a comma separated string from the strings in the provided
+        /// IEnumerable of strings.
+        /// </summary>
+        /// <param name="strings">a comma separated string based on the pro</param>
+        /// <returns></returns>
+        private static string ToCommaSeparatedString(IEnumerable<string> strings)
         {
-            string fieldsString;
-            if (fields != null)
-                fieldsString = string.Join(",", fields);
+            if (strings != null)
+                return string.Join(",", strings);
             else
-                fieldsString = "";
-            return fieldsString;
+                return string.Empty;
         }
 
         /// <summary>
@@ -74,7 +77,7 @@ namespace AnotherJiraRestClient
         /// <returns>The issue with the specified key</returns>
         public Issue GetIssue(string issueKey, IEnumerable<string> fields = null)
         {
-            var fieldsString = GetFieldsString(fields);
+            var fieldsString = ToCommaSeparatedString(fields);
             
             var request = new RestRequest();
             // TODO: Move /rest/api/2 elsewhere
@@ -101,7 +104,7 @@ namespace AnotherJiraRestClient
             request.AddParameter(new Parameter()
             {
                 Name = "fields",
-                Value = GetFieldsString(fields),
+                Value = ToCommaSeparatedString(fields),
                 Type = ParameterType.GetOrPost
             });
             request.AddParameter(new Parameter()
@@ -143,6 +146,13 @@ namespace AnotherJiraRestClient
             return Execute<List<Priority>>(request);
         }
 
+        /// <summary>
+        /// Returns the meta data for creating issues. This includes the 
+        /// available projects and issue types, but not fields (fields
+        /// are supported in the Jira api but not by this wrapper).
+        /// </summary>
+        /// <param name="projectKey"></param>
+        /// <returns>the meta data for creating issues</returns>
         public ProjectMeta GetProjectMeta(string projectKey)
         {
             var request = new RestRequest();
@@ -171,7 +181,19 @@ namespace AnotherJiraRestClient
             return Execute<List<Status>>(request);
         }
 
-        public string CreateIssue(string projectKey, string summary, string description, string issueTypeId, string priorityId, IEnumerable<string> labels)
+        /// <summary>
+        /// Creates a new issue. Returns the IRestResponse, use 
+        /// IRestResponse.StatusCode to find out if the request was successful 
+        /// (200).
+        /// </summary>
+        /// <param name="projectKey"></param>
+        /// <param name="summary"></param>
+        /// <param name="description"></param>
+        /// <param name="issueTypeId"></param>
+        /// <param name="priorityId"></param>
+        /// <param name="labels"></param>
+        /// <returns></returns>
+        public IRestResponse CreateIssue(string projectKey, string summary, string description, string issueTypeId, string priorityId, IEnumerable<string> labels)
         {
             // TODO: Can you add custom fields by using an ExpandoObject??
             var request = new RestRequest(Method.POST);
@@ -189,8 +211,7 @@ namespace AnotherJiraRestClient
                     labels = labels
                 }
             });
-            var response = client.Execute(request);
-            return response.Content;
+            return client.Execute(request);
         }
     }
 }
