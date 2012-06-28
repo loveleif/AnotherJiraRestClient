@@ -25,15 +25,11 @@ namespace AnotherJiraRestClient
         private readonly RestClient client;
 
         /// <summary>
-        /// Constructs a JiraClient. Please note, the baseUrl needs to be https
-        /// (not http), otherwise Jira will response with unauthorized.
+        /// Constructs a JiraClient. Please note, the baseUrl from the account
+        /// needs to be https (not http), otherwise Jira will response with 
+        /// unauthorized.
         /// </summary>
-        /// <param name="baseUrl">The domain part of the Jira 
-        /// installation. For example https://example.atlassian.net/. Please 
-        /// note, if you don't use https Jira will response with unauthorized.
-        /// </param>
-        /// <param name="userName">User name</param>
-        /// <param name="password">Password</param>
+        /// <param name="account">Jira account information</param>
         public JiraClient(JiraAccount account)
         {
             client = new RestClient(account.ServerUrl)
@@ -43,14 +39,24 @@ namespace AnotherJiraRestClient
         }
 
         /// <summary>
-        /// Executes a RestRequest and returns the deserialized response.
+        /// Executes a RestRequest and returns the deserialized response. If
+        /// the response hasn't got the specified response code or if an
+        /// exception was thrown during execution a JiraApiException will be 
+        /// thrown.
         /// </summary>
         /// <typeparam name="T">Request return type</typeparam>
         /// <param name="request">request to execute</param>
         /// <returns>deserialized response of request</returns>
-        public T Execute<T>(RestRequest request) where T : new()
+        public T Execute<T>(RestRequest request, HttpStatusCode expectedResponseCode) where T : new()
         {
-            return client.Execute<T>(request).Data;
+            var response = client.Execute<T>(request);
+
+            if (response.StatusCode != expectedResponseCode || response.ErrorException != null)
+                throw new JiraApiException(
+                      "HTTP response: " + response.StatusCode + " - " + response.StatusDescription
+                    + " - " + response.Content);
+            else
+                return response.Data;
         }
 
         /// <summary>
@@ -83,7 +89,7 @@ namespace AnotherJiraRestClient
             // TODO: Move /rest/api/2 elsewhere
             request.Resource = "/rest/api/2/issue/" + issueKey + "?fields=" + fieldsString;
             request.Method = Method.GET;
-            return Execute<Issue>(request);
+            return Execute<Issue>(request, HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -120,7 +126,7 @@ namespace AnotherJiraRestClient
                 Type = ParameterType.GetOrPost
             });
             request.Method = Method.GET;
-            return Execute<Issues>(request);
+            return Execute<Issues>(request, HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -143,7 +149,7 @@ namespace AnotherJiraRestClient
             // TODO: Move /rest/api/2 elsewhere
             request.Resource = "/rest/api/2/priority";
             request.Method = Method.GET;
-            return Execute<List<Priority>>(request);
+            return Execute<List<Priority>>(request, HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -162,9 +168,10 @@ namespace AnotherJiraRestClient
                 Value = projectKey, 
                 Type = ParameterType.GetOrPost });
             request.Method = Method.GET;
-            var createMeta = Execute<IssueCreateMeta>(request);
-            if (createMeta.projects[0].key != projectKey)
-                return null;
+            var createMeta = Execute<IssueCreateMeta>(request, HttpStatusCode.OK);
+            if (createMeta.projects[0].key != projectKey || createMeta.projects.Count != 1)
+                // TODO: Error message
+                throw new JiraApiException();
             return createMeta.projects[0];
         }
 
@@ -178,7 +185,7 @@ namespace AnotherJiraRestClient
             // TODO: Move /rest/api/2 elsewhere
             request.Resource = "/rest/api/2/status";
             request.Method = Method.GET;
-            return Execute<List<Status>>(request);
+            return Execute<List<Status>>(request, HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -210,12 +217,7 @@ namespace AnotherJiraRestClient
                 }
             });
 
-            var response = client.Execute<BasicIssue>(request);
-            if (response.ErrorException != null || (response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.OK))
-                // TODO: Better message.
-                throw new JiraApiException("Failed to create issue. HTTP response: " + response.StatusCode + ". Svar:" + response.Content);
-            else
-                return response.Data;
+            return Execute<BasicIssue>(request, HttpStatusCode.Created);
         }
     }
 }
