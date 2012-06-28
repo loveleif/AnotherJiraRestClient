@@ -182,9 +182,7 @@ namespace AnotherJiraRestClient
         }
 
         /// <summary>
-        /// Creates a new issue. Returns the IRestResponse, use 
-        /// IRestResponse.StatusCode to find out if the request was successful 
-        /// (200).
+        /// Creates a new issue.
         /// </summary>
         /// <param name="projectKey"></param>
         /// <param name="summary"></param>
@@ -192,8 +190,8 @@ namespace AnotherJiraRestClient
         /// <param name="issueTypeId"></param>
         /// <param name="priorityId"></param>
         /// <param name="labels"></param>
-        /// <returns></returns>
-        public IRestResponse CreateIssue(string projectKey, string summary, string description, string issueTypeId, string priorityId, IEnumerable<string> labels)
+        /// <returns>the new issue</returns>
+        public BasicIssue CreateIssue(string projectKey, string summary, string description, string issueTypeId, string priorityId, IEnumerable<string> labels)
         {
             // TODO: Can you add custom fields by using an ExpandoObject??
             var request = new RestRequest(Method.POST);
@@ -211,7 +209,13 @@ namespace AnotherJiraRestClient
                     labels = labels
                 }
             });
-            return client.Execute(request);
+
+            var response = client.Execute<BasicIssue>(request);
+            if (response.ErrorException != null || (response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.OK))
+                // TODO: Better message.
+                throw new JiraApiException("Failed to create issue. HTTP response: " + response.StatusCode + ". Svar:" + response.Content);
+            else
+                return response.Data;
         }
     }
 }

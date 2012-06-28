@@ -48,6 +48,7 @@
     <Compile Include="JiraModel\IssueCreateMeta.cs" />
     <Compile Include="JiraModel\Issues.cs" />
     <Compile Include="JiraClient.cs" />
+    <Compile Include="JiraModel\JiraApiException.cs" />
     <Compile Include="JiraModel\Priority.cs" />
     <Compile Include="JiraModel\Status.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

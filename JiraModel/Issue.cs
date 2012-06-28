@@ -12,7 +12,7 @@ namespace AnotherJiraRestClient
     /// Wrapper around the JSON object returned for a JIRA issue. See 
     /// http://docs.atlassian.com/jira/REST/latest/ for documentation.
     /// </summary>
-    public class Issue
+    public class Issue : BasicIssue
     {
         // Field names
         public const string FIELD_PROGRESS = "progress";
@@ -51,11 +51,15 @@ namespace AnotherJiraRestClient
         public const string FIELD_TIMEORIGINALESTIMATE = "timeoriginalestimate";
         public const string FIELD_AGGREGATETIMESPENT = "aggregatetimespent";
 
+        public Fields fields { get; set; }
+    }
+
+    public class BasicIssue
+    {
         public string expand { get; set; }
         public string id { get; set; }
         public string self { get; set; }
         public string key { get; set; }
-        public Fields fields { get; set; }
     }
 
     public class Fields
