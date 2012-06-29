@@ -51,9 +51,9 @@ namespace AnotherJiraRestClient
         {
             var response = client.Execute<T>(request);
 
-            if (response.StatusCode != expectedResponseCode || response.ErrorException != null)
+            if (response.ResponseStatus != ResponseStatus.Completed || response.ErrorException != null)
                 throw new JiraApiException(
-                      "HTTP response: " + response.StatusCode + " - " + response.StatusDescription
+                      "RestSharp response status: " + response.ResponseStatus + " - HTTP response: " + response.StatusCode + " - " + response.StatusDescription
                     + " - " + response.Content);
             else
                 return response.Data;
