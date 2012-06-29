@@ -15,6 +15,8 @@ namespace AnotherJiraRestClient
 
     // TODO: What if URL is too long?
 
+    // TODO: Add PUT /rest/api/2/application-properties/{id}
+
     /// <summary>
     /// Class used for all interaction with the Jira API. See 
     /// http://docs.atlassian.com/jira/REST/latest/ for documentation of the
@@ -163,7 +165,7 @@ namespace AnotherJiraRestClient
         {
             var request = new RestRequest();
             request.Resource = "/rest/api/2/issue/createmeta";
-            request.Parameters.Add(new Parameter() 
+            request.AddParameter(new Parameter() 
               { Name = "projectKeys", 
                 Value = projectKey, 
                 Type = ParameterType.GetOrPost });
@@ -201,9 +203,13 @@ namespace AnotherJiraRestClient
         public BasicIssue CreateIssue(string projectKey, string summary, string description, string issueTypeId, string priorityId, IEnumerable<string> labels)
         {
             // TODO: Can you add custom fields by using an ExpandoObject??
-            var request = new RestRequest(Method.POST);
-            request.Resource = "rest/api/2/issue";
-            request.RequestFormat = DataFormat.Json;
+            var request = new RestRequest()
+            {
+                Resource = "rest/api/2/issue",
+                RequestFormat = DataFormat.Json,
+                Method = Method.POST
+            };
+
             request.AddBody(new
             {
                 fields = new
@@ -219,5 +225,26 @@ namespace AnotherJiraRestClient
 
             return Execute<BasicIssue>(request, HttpStatusCode.Created);
         }
+
+        public ApplicationProperty GetApplicationProperty(string propertyKey)
+        {
+            var request = new RestRequest()
+            {
+                Method = Method.GET,
+                Resource = "rest/api/2/application-properties",
+                RequestFormat = DataFormat.Json
+            };
+            
+            request.AddParameter(new Parameter()
+            {
+                Name = "key",
+                Value = propertyKey,
+                Type = ParameterType.GetOrPost
+            });
+
+            return Execute<ApplicationProperty>(request, HttpStatusCode.OK);
+        }
+
+        
     }
 }
