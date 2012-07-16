@@ -17,6 +17,7 @@ namespace AnotherJiraRestClient
 
     // TODO: Add PUT /rest/api/2/application-properties/{id}
 
+
     /// <summary>
     /// Class used for all interaction with the Jira API. See 
     /// http://docs.atlassian.com/jira/REST/latest/ for documentation of the
@@ -245,6 +246,29 @@ namespace AnotherJiraRestClient
             return Execute<ApplicationProperty>(request, HttpStatusCode.OK);
         }
 
-        
+        public Attachment GetAttachment(string attachmentId)
+        {
+            var request = new RestRequest()
+            {
+                Method = Method.GET,
+                Resource = "rest/api/2/attachment/" + attachmentId,
+                RequestFormat = DataFormat.Json
+            };
+
+            return Execute<Attachment>(request, HttpStatusCode.OK);
+        }
+
+        public void DeleteAttachment(string attachmentId)
+        {
+            var request = new RestRequest()
+            {
+                Method = Method.DELETE,
+                Resource = "rest/api/2/attachment/" + attachmentId
+            };
+
+            var response = client.Execute(request);
+            if (response.ResponseStatus != ResponseStatus.Completed || response.StatusCode != HttpStatusCode.NoContent)
+                throw new JiraApiException("Failed to delete attachment with id=" + attachmentId);
+        }
     }
 }

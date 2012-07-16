@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JiraAccount.cs" />
+    <Compile Include="JiraModel\ApplicationProperty.cs" />
+    <Compile Include="JiraModel\Attachment.cs" />
     <Compile Include="JiraModel\Issue.cs" />
     <Compile Include="JiraModel\IssueCreateMeta.cs" />
     <Compile Include="JiraModel\Issues.cs" />
