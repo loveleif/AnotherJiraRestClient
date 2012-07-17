@@ -201,7 +201,7 @@ namespace AnotherJiraRestClient
         /// <param name="priorityId"></param>
         /// <param name="labels"></param>
         /// <returns>the new issue</returns>
-        public BasicIssue CreateIssue(string projectKey, string summary, string description, string issueTypeId, string priorityId, IEnumerable<string> labels)
+        public BasicIssue CreateIssue(CreateIssue newIssue)
         {
             // TODO: Can you add custom fields by using an ExpandoObject??
             var request = new RestRequest()
@@ -211,18 +211,7 @@ namespace AnotherJiraRestClient
                 Method = Method.POST
             };
 
-            request.AddBody(new
-            {
-                fields = new
-                {
-                    project = new { key = projectKey },
-                    summary = summary,
-                    description = description,
-                    issuetype = new { id = issueTypeId },
-                    priority = new { id = priorityId },
-                    labels = labels
-                }
-            });
+            request.AddBody(newIssue);
 
             return Execute<BasicIssue>(request, HttpStatusCode.Created);
         }
