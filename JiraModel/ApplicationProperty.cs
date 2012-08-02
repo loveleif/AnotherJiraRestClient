@@ -5,6 +5,9 @@ using System.Text;
 
 namespace AnotherJiraRestClient.JiraModel
 {
+    /// <summary>
+    /// Class representing an Jira application property.
+    /// </summary>
     public class ApplicationProperty
     {
         public string id { get; set; }

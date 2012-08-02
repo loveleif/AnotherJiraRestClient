@@ -5,6 +5,9 @@ using System.Text;
 
 namespace AnotherJiraRestClient.JiraModel
 {
+    /// <summary>
+    /// Class representing a Jira attachment
+    /// </summary>
     public class Attachment
     {
         public string self { get; set; }

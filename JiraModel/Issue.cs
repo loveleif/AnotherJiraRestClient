@@ -6,7 +6,7 @@ using AnotherJiraRestClient.JiraModel;
 
 namespace AnotherJiraRestClient
 {
-    // TODO: Change to nullable types
+    // TODO: Change to nullable types?
 
     /// <summary>
     /// Wrapper around the JSON object returned for a JIRA issue. See 
