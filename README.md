@@ -1,6 +1,6 @@
 AnotherJiraRestClient
 =====================
-PLEASE NOTE, this is work under development. AnotherJiraRestClient is a(nother) .NET wrapper for the [Jira REST API](http://docs.atlassian.com/jira/REST/latest/) written in C#.
+AnotherJiraRestClient is a(nother) .NET wrapper for the [Jira REST API](http://docs.atlassian.com/jira/REST/latest/) written in C#.
 
 Usage
 -----
