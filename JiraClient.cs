@@ -193,12 +193,6 @@ namespace AnotherJiraRestClient
         /// Creates a new issue. Throws a JiraApiException if the request was 
         /// unable to execute.
         /// </summary>
-        /// <param name="projectKey">the project key of the issue</param>
-        /// <param name="summary">the summary field of the issue</param>
-        /// <param name="description">the description field of the issue</param>
-        /// <param name="issueTypeId">the type (id) of the issue</param>
-        /// <param name="priorityId">the priority (id) of the issue</param>
-        /// <param name="labels">issue labels</param>
         /// <returns>the new issue</returns>
         public BasicIssue CreateIssue(CreateIssue newIssue)
         {
