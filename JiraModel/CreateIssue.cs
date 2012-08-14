@@ -7,6 +7,10 @@ namespace AnotherJiraRestClient.JiraModel
 {
     /// <summary>
     /// Class used to create a new issue in the Jira API.
+    /// 
+    /// Contains only a dictionary because that allows us to (easily) add any custom fields
+    /// without having trouble with serialization and deserialization. That's why Issue is not used
+    /// for creating issues.
     /// </summary>
     public class CreateIssue
     {
