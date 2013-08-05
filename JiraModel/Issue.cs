@@ -1,8 +1,5 @@
-﻿using System;
+﻿using AnotherJiraRestClient.JiraModel;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AnotherJiraRestClient.JiraModel;
 
 namespace AnotherJiraRestClient
 {
@@ -83,7 +80,7 @@ namespace AnotherJiraRestClient
         public List<object> issuelinks { get; set; }
         public Watches watches { get; set; }
         public Worklogs worklog { get; set; }
-        public List<object> subtasks { get; set; }
+        public List<Subtask> subtasks { get; set; }
         public Status status { get; set; }
         public List<string> labels { get; set; }
         public int workratio { get; set; }
@@ -99,6 +96,14 @@ namespace AnotherJiraRestClient
         public Comments comment { get; set; }
         public int timeoriginalestimate { get; set; }
         public int aggregatetimespent { get; set; }
+    }
+
+    public class Subtask
+    {
+        public string id { get; set; }
+        public string key { get; set; }
+        public string self { get; set; }
+        public List<object> fields { get; set; }
     }
 
     public class Progress
