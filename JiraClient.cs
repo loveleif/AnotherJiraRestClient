@@ -78,8 +78,7 @@ namespace AnotherJiraRestClient
             var fieldsString = ToCommaSeparatedString(fields);
             
             var request = new RestRequest();
-            // TODO: Move /rest/api/2 elsewhere
-            request.Resource = "/rest/api/2/issue/" + issueKey + "?fields=" + fieldsString;
+            request.Resource = string.Format("{0}?fields={1}", ResourceUrls.IssueByKey(issueKey), fieldsString);
             request.Method = Method.GET;
             
             var issue = Execute<Issue>(request, HttpStatusCode.OK);
@@ -95,7 +94,7 @@ namespace AnotherJiraRestClient
         public Issues GetIssuesByJql(string jql, int startAt, int maxResults, IEnumerable<string> fields = null)
         {
             var request = new RestRequest();
-            request.Resource = "/rest/api/2/search";
+            request.Resource = ResourceUrls.Search();
             request.AddParameter(new Parameter()
                 {
                     Name = "jql",
@@ -143,8 +142,7 @@ namespace AnotherJiraRestClient
         public List<Priority> GetPriorities()
         {
             var request = new RestRequest();
-            // TODO: Move /rest/api/2 elsewhere
-            request.Resource = "/rest/api/2/priority";
+            request.Resource = ResourceUrls.Priority();
             request.Method = Method.GET;
             return Execute<List<Priority>>(request, HttpStatusCode.OK);
         }
@@ -159,7 +157,7 @@ namespace AnotherJiraRestClient
         public ProjectMeta GetProjectMeta(string projectKey)
         {
             var request = new RestRequest();
-            request.Resource = "/rest/api/2/issue/createmeta";
+            request.Resource = ResourceUrls.CreateMeta();
             request.AddParameter(new Parameter() 
               { Name = "projectKeys", 
                 Value = projectKey, 
@@ -180,8 +178,7 @@ namespace AnotherJiraRestClient
         public List<Status> GetStatuses()
         {
             var request = new RestRequest();
-            // TODO: Move /rest/api/2 elsewhere
-            request.Resource = "/rest/api/2/status";
+            request.Resource = ResourceUrls.Status();
             request.Method = Method.GET;
             return Execute<List<Status>>(request, HttpStatusCode.OK);
         }
@@ -195,7 +192,7 @@ namespace AnotherJiraRestClient
         {
             var request = new RestRequest()
             {
-                Resource = "rest/api/2/issue",
+                Resource = ResourceUrls.Issue(),
                 RequestFormat = DataFormat.Json,
                 Method = Method.POST
             };
@@ -215,7 +212,7 @@ namespace AnotherJiraRestClient
             var request = new RestRequest()
             {
                 Method = Method.GET,
-                Resource = "rest/api/2/application-properties",
+                Resource = ResourceUrls.ApplicationProperties(),
                 RequestFormat = DataFormat.Json
             };
             
@@ -239,7 +236,7 @@ namespace AnotherJiraRestClient
             var request = new RestRequest()
             {
                 Method = Method.GET,
-                Resource = "rest/api/2/attachment/" + attachmentId,
+                Resource = ResourceUrls.AttachmentById(attachmentId),
                 RequestFormat = DataFormat.Json
             };
 
@@ -255,7 +252,7 @@ namespace AnotherJiraRestClient
             var request = new RestRequest()
             {
                 Method = Method.DELETE,
-                Resource = "rest/api/2/attachment/" + attachmentId
+                Resource = ResourceUrls.AttachmentById(attachmentId)
             };
 
             var response = client.Execute(request);
