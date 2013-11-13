@@ -83,7 +83,7 @@ namespace AnotherJiraRestClient
         public List<Subtask> subtasks { get; set; }
         public Status status { get; set; }
         public List<string> labels { get; set; }
-        public int workratio { get; set; }
+        public long workratio { get; set; }
         public Author assignee { get; set; }
         public List<object> attachment { get; set; }
         public int aggregatetimeestimate { get; set; }
