@@ -34,6 +34,7 @@ namespace AnotherJiraRestClient
         /// </summary>
         /// <typeparam name="T">Request return type</typeparam>
         /// <param name="request">request to execute</param>
+        /// <param name="expectedResponseCode">The expected HTTP response code</param>
         /// <returns>deserialized response of request</returns>
         public T Execute<T>(RestRequest request, HttpStatusCode expectedResponseCode) where T : new()
         {
@@ -41,11 +42,9 @@ namespace AnotherJiraRestClient
             var response = client.Execute<T>(request);
 
             if (response.ResponseStatus != ResponseStatus.Completed || response.ErrorException != null)
-                throw new JiraApiException(
-                      "RestSharp response status: " + response.ResponseStatus + " - HTTP response: " + response.StatusCode + " - " + response.StatusDescription
-                    + " - " + response.Content);
-            else
-                return response.Data;
+               throw new JiraApiException(string.Format("RestSharp response status: {0} - HTTP response: {1} - {2} - {3}", response.ResponseStatus, response.StatusCode, response.StatusDescription, response.Content));
+
+            return response.Data;
         }
 
         /// <summary>
