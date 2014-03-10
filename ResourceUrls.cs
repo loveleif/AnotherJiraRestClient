@@ -46,6 +46,11 @@ namespace AnotherJiraRestClient
             return Url(string.Format("attachment/{0}", attachmentId));
         }
 
+        public static string Project()
+        {
+            return Url("project");
+        }
+
         private static string Url(string key)
         {
             return Path.Combine(BaseUrl, key);

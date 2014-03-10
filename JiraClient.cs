@@ -134,6 +134,23 @@ namespace AnotherJiraRestClient
         }
 
         /// <summary>
+        /// Returns all available projects the current user has permision to view. 
+        /// Throws a JiraApiException if the request was unable to execute.
+        /// </summary>
+        /// <returns>Details of all projects visible to user</returns>
+        public List<Project> GetProjects()
+        {
+            var request = new RestRequest()
+            {
+                Resource = ResourceUrls.Project(),
+                RequestFormat = DataFormat.Json,
+                Method = Method.GET
+            };
+
+            return Execute<List<Project>>(request, HttpStatusCode.OK);
+        } 
+
+        /// <summary>
         /// Returns a list of all possible priorities.  Throws
         /// a JiraApiException if the request was unable to execute.
         /// </summary>
