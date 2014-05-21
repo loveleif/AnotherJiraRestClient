@@ -60,7 +60,7 @@ namespace AnotherJiraRestClient
         public string key { get; set; }
     }
 
-    public class Fields
+    public partial class Fields
     {
         public Progress progress { get; set; }
         public string summary { get; set; }
@@ -107,6 +107,13 @@ namespace AnotherJiraRestClient
         public string archived { get; set; }
         public string released { get; set; }
         public DateTime releaseDate { get; set; }
+    }
+
+    public class customfield
+    {
+        public string self { get; set; }
+        public string value { get; set; }
+        public string id { get; set; }
     }
 
     public class Subtask
