@@ -41,10 +41,20 @@ namespace AnotherJiraRestClient
             // Won't throw exception.
             var response = client.Execute<T>(request);
 
-            if (response.ResponseStatus != ResponseStatus.Completed || response.ErrorException != null)
-               throw new JiraApiException(string.Format("RestSharp response status: {0} - HTTP response: {1} - {2} - {3}", response.ResponseStatus, response.StatusCode, response.StatusDescription, response.Content));
+            validateResponse(response);
 
             return response.Data;
+        }
+
+        /// <summary>
+        /// Throws exception with details if request was not unsucessful
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="response"></param>
+        private static void validateResponse(IRestResponse response)
+        {
+            if (response.ResponseStatus != ResponseStatus.Completed || response.ErrorException != null || response.StatusCode == HttpStatusCode.BadRequest)
+                throw new JiraApiException(string.Format("RestSharp response status: {0} - HTTP response: {1} - {2} - {3}", response.ResponseStatus, response.StatusCode, response.StatusDescription, response.Content));
         }
 
         /// <summary>
@@ -75,11 +85,11 @@ namespace AnotherJiraRestClient
         public Issue GetIssue(string issueKey, IEnumerable<string> fields = null)
         {
             var fieldsString = ToCommaSeparatedString(fields);
-            
+
             var request = new RestRequest();
             request.Resource = string.Format("{0}?fields={1}", ResourceUrls.IssueByKey(issueKey), fieldsString);
             request.Method = Method.GET;
-            
+
             var issue = Execute<Issue>(request, HttpStatusCode.OK);
             return issue.fields != null ? issue : null;
         }
@@ -148,7 +158,7 @@ namespace AnotherJiraRestClient
             };
 
             return Execute<List<Project>>(request, HttpStatusCode.OK);
-        } 
+        }
 
         /// <summary>
         /// Returns a list of all possible priorities.  Throws
@@ -174,10 +184,12 @@ namespace AnotherJiraRestClient
         {
             var request = new RestRequest();
             request.Resource = ResourceUrls.CreateMeta();
-            request.AddParameter(new Parameter() 
-              { Name = "projectKeys", 
-                Value = projectKey, 
-                Type = ParameterType.GetOrPost });
+            request.AddParameter(new Parameter()
+              {
+                  Name = "projectKeys",
+                  Value = projectKey,
+                  Type = ParameterType.GetOrPost
+              });
             request.Method = Method.GET;
             var createMeta = Execute<IssueCreateMeta>(request, HttpStatusCode.OK);
             if (createMeta.projects[0].key != projectKey || createMeta.projects.Count != 1)
@@ -231,7 +243,7 @@ namespace AnotherJiraRestClient
                 Resource = ResourceUrls.ApplicationProperties(),
                 RequestFormat = DataFormat.Json
             };
-            
+
             request.AddParameter(new Parameter()
             {
                 Name = "key",
@@ -274,6 +286,53 @@ namespace AnotherJiraRestClient
             var response = client.Execute(request);
             if (response.ResponseStatus != ResponseStatus.Completed || response.StatusCode != HttpStatusCode.NoContent)
                 throw new JiraApiException("Failed to delete attachment with id=" + attachmentId);
+        }        
+        
+        /// <summary>
+        /// Update time tracking estimates
+        /// </summary>
+        /// <param name="issuekey"></param>
+        /// <param name="orginialEstimateMinutes"></param>
+        /// <param name="remainingEstimateMinutes"></param>
+        /// <returns></returns>
+        public bool UpdateTimetracking(string issuekey, int orginialEstimateMinutes, int remainingEstimateMinutes)
+        {
+            var request = new RestRequest()
+            {
+                Resource = string.Format("{0}", ResourceUrls.IssueByKey(issuekey)),
+                Method = Method.PUT,
+                RequestFormat = DataFormat.Json,
+            };
+
+            // Alternative for "simple" fields
+            //request.AddBody(
+            //    new { fields = new { summary = issue.fields.summary } }
+            //);
+
+            request.AddBody(
+                new
+                {
+                    update = new
+                    {
+                        timetracking = new object[] {new
+                        {
+                            edit = new
+                            {
+                                // No entry in seconds possible apparently
+                                originalEstimate = string.Format("{0}m", orginialEstimateMinutes),
+                                remainingEstimate= string.Format("{0}m", remainingEstimateMinutes)
+                            }
+                        }}
+                    }
+                }
+                );
+
+            // No response expected
+            var response = client.Execute(request);
+
+            validateResponse(response);
+
+            return response.StatusCode == HttpStatusCode.NoContent;
         }
     }
 }
