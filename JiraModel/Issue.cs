@@ -1,4 +1,5 @@
-﻿using AnotherJiraRestClient.JiraModel;
+﻿using System;
+using AnotherJiraRestClient.JiraModel;
 using System.Collections.Generic;
 
 namespace AnotherJiraRestClient
@@ -59,7 +60,7 @@ namespace AnotherJiraRestClient
         public string key { get; set; }
     }
 
-    public class Fields
+    public partial class Fields
     {
         public Progress progress { get; set; }
         public string summary { get; set; }
@@ -67,7 +68,7 @@ namespace AnotherJiraRestClient
         public IssueType issuetype { get; set; }
         public Votes votes { get; set; }
         public Resolution resolution { get; set; }
-        public List<object> fixVersions { get; set; }
+        public List<fixversion> fixVersions { get; set; }
         public string resolutiondate { get; set; }
         public int timespent { get; set; }
         public Author reporter { get; set; }
@@ -96,6 +97,23 @@ namespace AnotherJiraRestClient
         public Comments comment { get; set; }
         public int timeoriginalestimate { get; set; }
         public int aggregatetimespent { get; set; }
+    }
+
+    public class fixversion
+    {
+        public string self { get; set; }
+        public string id { get; set; }
+        public string name { get; set; }
+        public string archived { get; set; }
+        public string released { get; set; }
+        public DateTime releaseDate { get; set; }
+    }
+
+    public class customfield
+    {
+        public string self { get; set; }
+        public string value { get; set; }
+        public string id { get; set; }
     }
 
     public class Subtask
