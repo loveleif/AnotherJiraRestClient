@@ -211,6 +211,23 @@ namespace AnotherJiraRestClient
             return Execute<List<Status>>(request, HttpStatusCode.OK);
         }
 
+		/// <summary>
+		/// Returns a list of users that match the search string. This resource cannot be accessed anonymously.
+		/// <para>Throws a JiraApiException if the request was unable to execute.</para>
+		/// </summary>
+		/// <param name="username">A query string used to search username, name or e-mail address</param>
+		/// <returns></returns>
+		public List<User> GetUser(string username)
+		{
+			var request = new RestRequest
+			{
+				Resource = string.Format("{0}/search?username={1}", ResourceUrls.User(), username),
+				Method = Method.GET
+			};
+
+			return Execute<List<User>>(request, HttpStatusCode.OK);
+		}
+
         /// <summary>
         /// Creates a new issue. Throws a JiraApiException if the request was 
         /// unable to execute.

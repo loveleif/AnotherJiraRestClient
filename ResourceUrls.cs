@@ -36,6 +36,11 @@ namespace AnotherJiraRestClient
             return Url("status");
         }
 
+		public static string User()
+		{
+			return Url("user");
+		}
+
         public static string ApplicationProperties()
         {
             return Url("application-properties");
