@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JiraModel\User.cs" />
+    <Compile Include="JiraModel\IssueLink.cs" />
+    <Compile Include="JiraModel\LinkType.cs" />
     <Compile Include="ResourceUrls.cs" />
     <Compile Include="JiraAccount.cs" />
     <Compile Include="JiraModel\ApplicationProperty.cs" />

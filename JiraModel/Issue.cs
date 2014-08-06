@@ -78,7 +78,7 @@ namespace AnotherJiraRestClient
         public string description { get; set; }
         public Priority priority { get; set; }
         public string duedate { get; set; }
-        public List<object> issuelinks { get; set; }
+        public List<IssueLink> issuelinks { get; set; }
         public Watches watches { get; set; }
         public Worklogs worklog { get; set; }
         public List<Subtask> subtasks { get; set; }
