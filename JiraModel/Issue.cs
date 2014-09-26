@@ -28,6 +28,7 @@ namespace AnotherJiraRestClient
         public const string FIELD_UPDATED = "updated";
         public const string FIELD_DESCRIPTION = "description";
         public const string FIELD_PRIORITY = "priority";
+        public const string FIELD_PARENT = "parent";
         public const string FIELD_DUEDATE = "duedate";
         public const string FIELD_ISSUELINKS = "issuelinks";
         public const string FIELD_WATCHES = "watches";
@@ -89,6 +90,7 @@ namespace AnotherJiraRestClient
         public List<object> attachment { get; set; }
         public int aggregatetimeestimate { get; set; }
         public Project project { get; set; }
+        public Parent parent { get; set; }
         public List<object> versions { get; set; }
         public string environment { get; set; }
         public int timeestimate { get; set; }
@@ -149,6 +151,14 @@ namespace AnotherJiraRestClient
         public string iconUrl { get; set; }
         public string name { get; set; }
         public bool subtask { get; set; }
+    }
+
+    public class Parent
+    {
+        public int id { get; set; }
+        public string key { get; set; }
+        public string self { get; set; }
+        public Fields fields { get; set; }
     }
 
     public class Votes
