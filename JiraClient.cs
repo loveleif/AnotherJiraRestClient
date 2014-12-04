@@ -1,6 +1,7 @@
 ﻿using AnotherJiraRestClient.JiraModel;
 using RestSharp;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace AnotherJiraRestClient
@@ -66,7 +67,7 @@ namespace AnotherJiraRestClient
         private static string ToCommaSeparatedString(IEnumerable<string> strings)
         {
             if (strings != null)
-                return string.Join(",", strings);
+                return string.Join(",", strings.ToArray());
             else
                 return string.Empty;
         }
@@ -286,8 +287,8 @@ namespace AnotherJiraRestClient
             var response = client.Execute(request);
             if (response.ResponseStatus != ResponseStatus.Completed || response.StatusCode != HttpStatusCode.NoContent)
                 throw new JiraApiException("Failed to delete attachment with id=" + attachmentId);
-        }        
-        
+        }
+
         /// <summary>
         /// Update time tracking estimates
         /// </summary>
