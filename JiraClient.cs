@@ -3,6 +3,7 @@ using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using RestSharp.Authenticators;
 
 namespace AnotherJiraRestClient
 {
@@ -13,7 +14,7 @@ namespace AnotherJiraRestClient
     /// </summary>
     public class JiraClient
     {
-        private readonly RestClient client;
+        private readonly RestClient _client;
 
         /// <summary>
         /// Constructs a JiraClient.
@@ -21,7 +22,7 @@ namespace AnotherJiraRestClient
         /// <param name="account">Jira account information</param>
         public JiraClient(JiraAccount account)
         {
-            client = new RestClient(account.ServerUrl)
+            _client = new RestClient(account.ServerUrl)
             {
                 Authenticator = new HttpBasicAuthenticator(account.User, account.Password)
             };
@@ -40,22 +41,22 @@ namespace AnotherJiraRestClient
         public T Execute<T>(RestRequest request, HttpStatusCode expectedResponseCode) where T : new()
         {
             // Won't throw exception.
-            var response = client.Execute<T>(request);
+            var response = _client.Execute<T>(request);
 
-            validateResponse(response);
+            ValidateResponse(response);
 
             return response.Data;
         }
 
-        /// <summary>
-        /// Throws exception with details if request was not unsucessful
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="response"></param>
-        private static void validateResponse(IRestResponse response)
+	    /// <summary>
+	    /// Throws exception with details if request was not unsucessful
+	    /// </summary>
+	    /// <param name="response"></param>
+	    private static void ValidateResponse(IRestResponse response)
         {
             if (response.ResponseStatus != ResponseStatus.Completed || response.ErrorException != null || response.StatusCode == HttpStatusCode.BadRequest)
-                throw new JiraApiException(string.Format("RestSharp response status: {0} - HTTP response: {1} - {2} - {3}", response.ResponseStatus, response.StatusCode, response.StatusDescription, response.Content));
+                throw new JiraApiException(
+	                $"RestSharp response status: {response.ResponseStatus} - HTTP response: {response.StatusCode} - {response.StatusDescription} - {response.Content}");
         }
 
         /// <summary>
@@ -95,17 +96,19 @@ namespace AnotherJiraRestClient
             return issue.fields != null ? issue : null;
         }
 
-        /// <summary>
-        /// Searches for Issues using JQL. Throws a JiraApiException if the request 
-        /// was unable to execute.
-        /// </summary>
-        /// <param name="jql">a JQL search string</param>
-        /// <returns>The search results</returns>
-        public Issues GetIssuesByJql(string jql, int startAt, int maxResults, IEnumerable<string> fields = null)
+	    /// <summary>
+	    /// Searches for Issues using JQL. Throws a JiraApiException if the request 
+	    /// was unable to execute.
+	    /// </summary>
+	    /// <param name="jql">a JQL search string</param>
+	    /// <param name="startAt"></param>
+	    /// <param name="maxResults"></param>
+	    /// <param name="fields"></param>
+	    /// <returns>The search results</returns>
+	    public Issues GetIssuesByJql(string jql, int startAt, int maxResults, IEnumerable<string> fields = null)
         {
-            var request = new RestRequest();
-            request.Resource = ResourceUrls.Search();
-            request.AddParameter(new Parameter()
+		    var request = new RestRequest {Resource = ResourceUrls.Search()};
+		    request.AddParameter(new Parameter()
                 {
                     Name = "jql",
                     Value = jql,
@@ -133,13 +136,16 @@ namespace AnotherJiraRestClient
             return Execute<Issues>(request, HttpStatusCode.OK);
         }
 
-        /// <summary>
-        /// Returns the Issues for the specified project.  Throws
-        /// a JiraApiException if the request was unable to execute.
-        /// </summary>
-        /// <param name="projectKey">project key</param>
-        /// <returns>the Issues of the specified project</returns>
-        public Issues GetIssuesByProject(string projectKey, int startAt, int maxResults, IEnumerable<string> fields = null)
+	    /// <summary>
+	    /// Returns the Issues for the specified project.  Throws
+	    /// a JiraApiException if the request was unable to execute.
+	    /// </summary>
+	    /// <param name="projectKey">project key</param>
+	    /// <param name="startAt"></param>
+	    /// <param name="maxResults"></param>
+	    /// <param name="fields"></param>
+	    /// <returns>the Issues of the specified project</returns>
+	    public Issues GetIssuesByProject(string projectKey, int startAt, int maxResults, IEnumerable<string> fields = null)
         {
             return GetIssuesByJql("project=" + projectKey, startAt, maxResults, fields);
         }
@@ -284,7 +290,7 @@ namespace AnotherJiraRestClient
                 Resource = ResourceUrls.AttachmentById(attachmentId)
             };
 
-            var response = client.Execute(request);
+            var response = _client.Execute(request);
             if (response.ResponseStatus != ResponseStatus.Completed || response.StatusCode != HttpStatusCode.NoContent)
                 throw new JiraApiException("Failed to delete attachment with id=" + attachmentId);
         }
@@ -300,7 +306,7 @@ namespace AnotherJiraRestClient
         {
             var request = new RestRequest()
             {
-                Resource = string.Format("{0}", ResourceUrls.IssueByKey(issuekey)),
+                Resource = $"{ResourceUrls.IssueByKey(issuekey)}",
                 Method = Method.PUT,
                 RequestFormat = DataFormat.Json,
             };
@@ -320,8 +326,8 @@ namespace AnotherJiraRestClient
                             edit = new
                             {
                                 // No entry in seconds possible apparently
-                                originalEstimate = string.Format("{0}m", orginialEstimateMinutes),
-                                remainingEstimate= string.Format("{0}m", remainingEstimateMinutes)
+                                originalEstimate = $"{orginialEstimateMinutes}m",
+                                remainingEstimate= $"{remainingEstimateMinutes}m"
                             }
                         }}
                     }
@@ -329,9 +335,9 @@ namespace AnotherJiraRestClient
                 );
 
             // No response expected
-            var response = client.Execute(request);
+            var response = _client.Execute(request);
 
-            validateResponse(response);
+            ValidateResponse(response);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
