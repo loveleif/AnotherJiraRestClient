@@ -1,9 +1,11 @@
-﻿using AnotherJiraRestClient.JiraModel;
+﻿using System;
+using AnotherJiraRestClient.JiraModel;
 using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using RestSharp.Authenticators;
+using Version = AnotherJiraRestClient.JiraModel.Version;
 
 namespace AnotherJiraRestClient
 {
@@ -88,24 +90,55 @@ namespace AnotherJiraRestClient
         {
             var fieldsString = ToCommaSeparatedString(fields);
 
-            var request = new RestRequest();
-            request.Resource = string.Format("{0}?fields={1}", ResourceUrls.IssueByKey(issueKey), fieldsString);
-            request.Method = Method.GET;
+	        var request = new RestRequest
+	        {
+		        Resource = $"{ResourceUrls.IssueByKey(issueKey)}?fields={fieldsString}",
+		        Method = Method.GET
+	        };
 
-            var issue = Execute<Issue>(request, HttpStatusCode.OK);
+	        var issue = Execute<Issue>(request, HttpStatusCode.OK);
             return issue.fields != null ? issue : null;
         }
 
-	    /// <summary>
-	    /// Searches for Issues using JQL. Throws a JiraApiException if the request 
-	    /// was unable to execute.
-	    /// </summary>
-	    /// <param name="jql">a JQL search string</param>
-	    /// <param name="startAt"></param>
-	    /// <param name="maxResults"></param>
-	    /// <param name="fields"></param>
-	    /// <returns>The search results</returns>
-	    public Issues GetIssuesByJql(string jql, int startAt, int maxResults, IEnumerable<string> fields = null)
+		public bool UpdateIssueFields(string issuekey, object fields)
+		{
+			var request = new RestRequest
+			{
+				Resource = $"{ResourceUrls.IssueByKey(issuekey)}",
+				Method = Method.PUT,
+				RequestFormat = DataFormat.Json,
+			};
+
+			//request.AddBody(
+			//	new
+			//	{
+			//		update = fields
+			//	});
+
+			// Alternative for "simple" fields
+			//request.AddBody(
+			//	new { fields = new { customfield_11421 = "1.0.0" } }
+			//);
+			request.AddBody(fields);
+
+			// No response expected
+			var response = _client.Execute(request);
+
+			ValidateResponse(response);
+
+			return response.StatusCode == HttpStatusCode.NoContent;
+		}
+
+		/// <summary>
+		/// Searches for Issues using JQL. Throws a JiraApiException if the request 
+		/// was unable to execute.
+		/// </summary>
+		/// <param name="jql">a JQL search string</param>
+		/// <param name="startAt"></param>
+		/// <param name="maxResults"></param>
+		/// <param name="fields"></param>
+		/// <returns>The search results</returns>
+		public Issues GetIssuesByJql(string jql, int startAt, int maxResults, IEnumerable<string> fields = null)
         {
 		    var request = new RestRequest {Resource = ResourceUrls.Search()};
 		    request.AddParameter(new Parameter()
@@ -189,9 +222,8 @@ namespace AnotherJiraRestClient
         /// <returns>the meta data for creating issues</returns>
         public ProjectMeta GetProjectMeta(string projectKey)
         {
-            var request = new RestRequest();
-            request.Resource = ResourceUrls.CreateMeta();
-            request.AddParameter(new Parameter()
+	        var request = new RestRequest {Resource = ResourceUrls.CreateMeta()};
+	        request.AddParameter(new Parameter()
               {
                   Name = "projectKeys",
                   Value = projectKey,
@@ -216,6 +248,44 @@ namespace AnotherJiraRestClient
             request.Resource = ResourceUrls.Status();
             request.Method = Method.GET;
             return Execute<List<Status>>(request, HttpStatusCode.OK);
+        }
+		
+		public Version CreateVersion(NewVersion newVersion)
+        {
+            var request = new RestRequest()
+            {
+                Resource = ResourceUrls.Version(),
+                RequestFormat = DataFormat.Json,
+                Method = Method.POST
+            };
+
+            request.AddBody(newVersion);
+
+            return Execute<Version>(request, HttpStatusCode.Created);
+        }
+
+        public Version UpdateVersion(UpdateVersion version)
+        {
+            var request = new RestRequest
+            {
+                Resource = ResourceUrls.Version(),
+                RequestFormat = DataFormat.Json,
+                Method = Method.PUT
+            };
+
+            request.AddBody(version);
+
+            return Execute<Version>(request, HttpStatusCode.OK);
+        }
+
+        public IEnumerable<Version> GetVersions(string projectKey)
+        {
+            var request = new RestRequest
+            {
+                Resource = ResourceUrls.Versions(projectKey), 
+                Method = Method.GET
+            };
+            return Execute<List<Version>>(request, HttpStatusCode.OK);
         }
 
         /// <summary>

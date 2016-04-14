@@ -8,7 +8,7 @@ namespace AnotherJiraRestClient
 
         public static string IssueByKey(string issueKey)
         {
-            return Url(string.Format("issue/{0}", issueKey));
+            return Url($"issue/{issueKey}");
         }
 
         public static string Issue()
@@ -36,6 +36,21 @@ namespace AnotherJiraRestClient
             return Url("status");
         }
 
+        public static string Versions(string projectKey)
+        {
+            return Url($"project/{projectKey}/versions");
+        }
+
+        public static string Version()
+        {
+            return Url("version");
+        }
+
+        public static string UpdateVersion(string versionId)
+        {
+            return Url($"version/{versionId}");
+        }
+
         public static string ApplicationProperties()
         {
             return Url("application-properties");
@@ -43,7 +58,7 @@ namespace AnotherJiraRestClient
 
         public static string AttachmentById(string attachmentId)
         {
-            return Url(string.Format("attachment/{0}", attachmentId));
+            return Url($"attachment/{attachmentId}");
         }
 
         public static string Project()

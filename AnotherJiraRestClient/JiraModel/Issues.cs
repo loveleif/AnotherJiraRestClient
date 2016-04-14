@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace AnotherJiraRestClient
+namespace AnotherJiraRestClient.JiraModel
 {
     /// <summary>
     /// Wrapper around the JSON object returned when searching issues. See 
