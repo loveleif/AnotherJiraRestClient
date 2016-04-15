@@ -1,9 +1,11 @@
+install:
+- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/install-nuget-3-3-0.ps1'))
 version: 0.0.{build}
 branches:
   only:
   - dev
 os:
-  - Previous Visual Studio 2015
+  - Visual Studio 2015
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
