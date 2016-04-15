@@ -13,6 +13,8 @@
 		<copyright>Copyright ©  2016 Ruskin Dantra</copyright>
 		<tags>AnotherJiraRestClient</tags>
 		<releaseNotes>
+			15-Apr-2016
+			* Added some extrea API calls
 		</releaseNotes>
 		<dependencies>
 			<dependency id="JetBrains.Annotations" version="10.1.4" />
