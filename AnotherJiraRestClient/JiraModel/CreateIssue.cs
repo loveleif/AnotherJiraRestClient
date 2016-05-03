@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace AnotherJiraRestClient.JiraModel
 {
@@ -14,7 +12,8 @@ namespace AnotherJiraRestClient.JiraModel
     /// </summary>
     public class CreateIssue
     {
-        public readonly Dictionary<string, object> fields;
+		[UsedImplicitly(ImplicitUseKindFlags.Access)]
+	    public readonly Dictionary<string, object> fields;
 
         public CreateIssue(
             string projectKey,

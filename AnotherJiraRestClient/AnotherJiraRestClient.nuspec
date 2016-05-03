@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>AnotherJiraRestClient-Ruskin</id>
+		<version>$version$</version>
+		<title>AnotherJiraRestClient-Ruskin</title>
+		<authors>Ruskin Dantra</authors>
+		<owners>ruskindantra</owners>
+		<projectUrl>https://github.com/ruskindantra/AnotherJiraRestClient</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<licenseUrl>https://github.com/ruskindantra/AnotherJiraRestClient/blob/master/LICENSE</licenseUrl>
+		<description>Fork of AnotherJiraRestClient to include some extra API calls against Jira</description>
+		<copyright>Copyright ©  2016 Ruskin Dantra</copyright>
+		<tags>AnotherJiraRestClient</tags>
+		<releaseNotes>
+			15-Apr-2016
+			* Added some extrea API calls
+		</releaseNotes>
+		<dependencies>
+			<dependency id="JetBrains.Annotations" version="10.1.4" />
+			<dependency id="System.Runtime" version="4.0.0" />
+			<dependency id="Restsharp" version="105.2.3" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="\bin\release\AnotherJiraRestClient.dll" target="lib\net452" />
+	</files>
+</package>
