@@ -1,5 +1,8 @@
 AnotherJiraRestClient
 =====================
+
+__PLEASE NOTE__: This project is not beeing maintained. I've been suggested that the following project might be better suited if you're looking for a C# jira client https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home (however I havn't tried it).
+
 AnotherJiraRestClient is a(nother) .NET wrapper for the [Jira REST API](http://docs.atlassian.com/jira/REST/latest/) written in C#.
 
 Usage examples
