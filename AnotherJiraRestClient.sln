@@ -1,14 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherJiraRestClient", "AnotherJiraRestClient\AnotherJiraRestClient.csproj", "{49EB9A11-ED25-412A-9416-C124A0CCFB8F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{29F3726A-AAE6-42E9-9750-5E9F22DA0E95}"
-	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherJiraRestClient.Sample", "AnotherJiraRestClient.Sample\AnotherJiraRestClient.Sample.csproj", "{F122798E-F04B-451F-A82A-BE28734BB183}"
 EndProject

@@ -1,5 +1,4 @@
-﻿using System;
-using AnotherJiraRestClient.JiraModel;
+﻿using AnotherJiraRestClient.JiraModel;
 using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
